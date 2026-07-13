@@ -1,0 +1,63 @@
+---
+// Hora.astro  (Código de vestimenta)
+---
+
+<div
+    id="dress-contenedor"
+    data-entrada
+    class="relative w-full flex flex-col items-center justify-center text-center px-8 py-12"
+>
+    <!-- IMAGEN ROPA (teñida en verde con máscara) -->
+    <div
+        id="dress-iconos"
+        class="w-[120px] h-[85px] mb-3 bg-[#5a6a32]"
+        style="-webkit-mask: url('/imagenes/ropa.png') center/contain no-repeat; mask: url('/imagenes/ropa.png') center/contain no-repeat;"
+    >
+    </div>
+
+    <!-- TÍTULO -->
+    <p
+        id="dress-titulo"
+        class="m-0 font-great-vibes text-[#5a6a32] text-[38px] leading-none mb-3"
+    >
+        Código de Vestimenta
+    </p>
+
+    <!-- SUBTÍTULO -->
+    <p
+        id="dress-formal"
+        class="m-0 font-crimson font-bold uppercase text-[#5a6a32] text-[17px] tracking-[0.12em]"
+    >
+        Formal
+    </p>
+</div>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initDress() {
+        const contenedor = document.getElementById("dress-contenedor");
+        if (!contenedor) return;
+
+        gsap.from(
+            ["#dress-iconos", "#dress-titulo", "#dress-formal"],
+            {
+                opacity: 0,
+                y: 25,
+                duration: 1,
+                ease: "power3.out",
+                stagger: 0.15,
+                scrollTrigger: {
+                    trigger: contenedor,
+                    start: "top 85%",
+                    toggleActions: "play none none reset",
+                },
+            },
+        );
+    }
+
+    document.addEventListener("DOMContentLoaded", initDress);
+    document.addEventListener("astro:page-load", initDress);
+</script>

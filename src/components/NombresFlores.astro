@@ -1,0 +1,209 @@
+---
+// NombresFlores.astro
+---
+
+<div
+    id="nombres-flores"
+    class="relative w-full min-h-screen overflow-hidden bg-[#bfd67e]"
+>
+    <!-- FONDO A PANTALLA COMPLETA -->
+    <img
+        src="/imagenes/fondoverde.png"
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+    />
+
+    <!-- FLORES ARRIBA -->
+    <img
+        src="/imagenes/Floresarriba.png"
+        alt=""
+        id="flores-arriba"
+        class="absolute top-0 left-0 w-[41%] h-auto z-[5] pointer-events-none select-none"
+    />
+
+    <!-- FLORES ABAJO -->
+    <img
+        src="/imagenes/Floresabajo.png"
+        alt=""
+        id="flores-abajo"
+        class="absolute bottom-0 right-0 w-[41%] h-auto z-[5] pointer-events-none select-none"
+    />
+
+    <!-- CONTENIDO CENTRAL -->
+    <div
+        class="relative z-[10] mx-auto max-w-md min-h-screen flex flex-col items-center justify-center text-center px-8 gap-3 py-16"
+    >
+        <!-- CORONA -->
+        <img
+            src="/imagenes/corona.png"
+            alt="Corona"
+            id="corona"
+            class="pointer-events-none block w-[70px] h-auto -mt-8 mb-1"
+        />
+
+        <!-- XV AÑOS -->
+        <h2
+            id="texto-mis-xv"
+            class="m-0 font-crimson font-normal uppercase text-[#5a6a32] text-[28px] leading-none"
+        >
+            Mis XV Años
+        </h2>
+
+        <!-- NOMBRE -->
+        <h1
+            id="texto-nombre"
+            class="m-0 mt-6 font-great-vibes font-normal text-[#5a6a32] text-[58px] leading-[1.05]"
+        >
+            Violeta
+        </h1>
+
+        <!-- SEPARADOR -->
+        <div
+            id="separador"
+            class="w-[70px] h-px bg-[#5a6a32]/60 my-3"
+        >
+        </div>
+
+        <!-- INVITACIÓN -->
+        <div
+            id="texto-invito"
+            class="font-crimson uppercase text-[#5a6a32] leading-[1.9]"
+        >
+            <p class="m-0 text-[16px] tracking-[0.3em]">Te invito</p>
+            <p class="m-0 text-[16px] tracking-[0.3em]">
+                a celebrar mi fiesta
+            </p>
+        </div>
+
+        <!-- DEDICATORIA -->
+        <p
+            id="texto-dedicatoria"
+            class="m-0 mt-5 font-crimson italic text-[#5a6a32] text-[19px] leading-[1.8] px-2"
+        >
+            "Hoy celebro mis 15 años con gratitud, sueños por cumplir y el
+            corazón lleno de alegría, que esta nueva etapa esté llena de
+            aprendizajes, retos y momentos inolvidables."
+        </p>
+    </div>
+</div>
+
+<!-- BOTÓN FLOTANTE PLAY/PAUSE -->
+<button
+    id="btn-audio-control"
+    aria-label="Controlar música"
+    class="fixed bottom-6 right-6 z-[9999] w-12 h-12 rounded-full shadow-lg
+           bg-white border border-[#5a6a32]/30 flex items-center justify-center
+           transition-all duration-300 hover:scale-110 active:scale-95"
+    style="opacity: 0; pointer-events: none;"
+>
+    <svg
+        id="icono-pause"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 text-[#5a6a32]"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+    >
+        <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+        <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+    </svg>
+    <svg
+        id="icono-play"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 text-[#5a6a32] hidden"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+    >
+        <path d="M8 5v14l11-7z"></path>
+    </svg>
+</button>
+
+<script>
+    import { gsap } from "gsap";
+
+    (window as any).iniciarAnimacionNombresFlores = () => {
+        const nf = document.getElementById("nombres-flores");
+        if (!nf) return;
+
+        // Todos los elementos entran al mismo tiempo
+        gsap.from(
+            [
+                "#corona",
+                "#texto-mis-xv",
+                "#texto-nombre",
+                "#separador",
+                "#texto-invito",
+                "#texto-dedicatoria",
+            ],
+            {
+                opacity: 0,
+                y: 20,
+                duration: 1.2,
+                ease: "power2.out",
+                delay: 0.3,
+            },
+        );
+
+        // Latido continuo de la corona
+        gsap.to("#corona", {
+            scale: 1.06,
+            duration: 2.8,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            delay: 1.5,
+        });
+
+        const btnAudio = document.getElementById(
+            "btn-audio-control",
+        ) as HTMLButtonElement;
+        const iconoPlay = document.getElementById("icono-play");
+        const iconoPause = document.getElementById("icono-pause");
+
+        const intervalo = setInterval(() => {
+            const audio = (window as any).audioGlobal;
+            if (audio) {
+                clearInterval(intervalo);
+                gsap.to(btnAudio, {
+                    opacity: 1,
+                    duration: 0.5,
+                    ease: "power2.out",
+                    onStart: () => {
+                        btnAudio.style.pointerEvents = "auto";
+                    },
+                });
+                iconoPlay?.classList.add("hidden");
+                iconoPause?.classList.remove("hidden");
+
+                btnAudio.addEventListener("click", () => {
+                    const audioActual = (window as any).audioGlobal;
+                    const reproduciendo = (window as any)
+                        .estaReproduciendoGlobal;
+                    if (!audioActual) return;
+                    if (reproduciendo) {
+                        audioActual.pause();
+                        (window as any).estaReproduciendoGlobal = false;
+                        iconoPause?.classList.add("hidden");
+                        iconoPlay?.classList.remove("hidden");
+                    } else {
+                        audioActual.play();
+                        (window as any).estaReproduciendoGlobal = true;
+                        iconoPlay?.classList.add("hidden");
+                        iconoPause?.classList.remove("hidden");
+                    }
+                    gsap.fromTo(
+                        btnAudio,
+                        { scale: 0.85 },
+                        { scale: 1, duration: 0.3, ease: "back.out(2)" },
+                    );
+                });
+            }
+        }, 300);
+    };
+
+    // Si no hay portada (ej. desarrollo directo), iniciar automáticamente
+    document.addEventListener("DOMContentLoaded", () => {
+        if (!document.getElementById("portada-sobre")) {
+            (window as any).iniciarAnimacionNombresFlores();
+        }
+    });
+</script>

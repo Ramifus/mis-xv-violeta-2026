@@ -1,0 +1,78 @@
+---
+// Restriccion.astro  (Confirmar asistencia)
+const telefono = "59178762918";
+const mensaje =
+    "Me complace confirmar mi asistencia para los 15 años de Violeta. Nos vemos el sábado 25 de julio, estaré sin falta";
+const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+---
+
+<div
+    id="rest-contenedor"
+    data-entrada
+    class="relative w-full overflow-hidden flex flex-col items-center justify-center text-center px-8 py-16"
+>
+    <!-- FLORES ABAJO DERECHA (detrás de todo) -->
+    <img
+        src="/imagenes/Floresabajo.png"
+        alt=""
+        class="absolute bottom-0 right-0 w-[42%] h-auto z-0 pointer-events-none select-none"
+    />
+
+    <!-- LÍNEA DECORATIVA -->
+    <div class="relative z-10 flex items-center justify-center w-full max-w-[240px] mb-8">
+        <span class="w-2 h-2 rotate-45 bg-[#5a6a32]"></span>
+        <span class="flex-1 h-px bg-[#5a6a32]/60"></span>
+        <span class="w-2 h-2 rotate-45 bg-[#5a6a32]"></span>
+    </div>
+
+    <!-- TÍTULO -->
+    <h2
+        id="rest-titulo"
+        class="relative z-10 m-0 font-crimson font-bold uppercase text-[#5a6a32] text-[19px] leading-[1.35] max-w-[260px]"
+    >
+        ¡Te espero para celebrar mis 15 años!
+    </h2>
+
+    <!-- BOTÓN CONFIRMAR -->
+    <a
+        id="rest-boton"
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="relative z-10 mt-9 inline-flex items-center justify-center rounded-full
+               border border-[#5a6a32] px-8 py-3 transition-colors hover:bg-[#5a6a32]/10"
+    >
+        <span
+            class="font-crimson uppercase text-[#5a6a32] text-[14px] tracking-[0.15em] whitespace-nowrap"
+        >
+            Confirmar asistencia
+        </span>
+    </a>
+</div>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initRestriccion() {
+        const contenedor = document.getElementById("rest-contenedor");
+        if (!contenedor) return;
+
+        gsap.from(["#rest-titulo", "#rest-boton"], {
+            opacity: 0,
+            y: 20,
+            duration: 1,
+            stagger: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: contenedor,
+                start: "top 85%",
+                toggleActions: "play none none reset",
+            },
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", initRestriccion);
+    document.addEventListener("astro:page-load", initRestriccion);
+</script>

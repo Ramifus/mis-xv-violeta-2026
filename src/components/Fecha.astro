@@ -1,0 +1,139 @@
+---
+// Fecha.astro  (Cuenta regresiva)
+---
+
+<div
+    id="faltan-contenedor"
+    data-entrada
+    class="relative w-full flex flex-col items-center justify-center text-center px-6 pt-2 pb-8"
+>
+    <!-- TÍTULO -->
+    <p
+        id="faltan-titulo"
+        class="m-0 font-great-vibes text-[#5a6a32] text-[42px] leading-none mb-5"
+    >
+        Faltan
+    </p>
+
+    <!-- LÍNEA DECORATIVA ARRIBA -->
+    <div class="flex items-center justify-center w-full max-w-[320px]">
+        <span class="w-2 h-2 rotate-45 bg-[#5a6a32]"></span>
+        <span class="flex-1 h-px bg-[#5a6a32]/60"></span>
+        <span class="w-2 h-2 rotate-45 bg-[#5a6a32]"></span>
+    </div>
+
+    <!-- CUENTA REGRESIVA -->
+    <div
+        id="faltan-numeros"
+        class="grid grid-cols-4 gap-3 w-full max-w-[320px] my-6"
+    >
+        <div class="flex flex-col items-center">
+            <span
+                id="f-dias"
+                class="font-crimson font-bold text-[#5a6a32] text-[34px] leading-none"
+                >00</span
+            >
+            <span
+                class="font-crimson uppercase text-[#5a6a32] text-[11px] tracking-[0.12em] mt-2 opacity-80"
+                >Días</span
+            >
+        </div>
+        <div class="flex flex-col items-center">
+            <span
+                id="f-horas"
+                class="font-crimson font-bold text-[#5a6a32] text-[34px] leading-none"
+                >00</span
+            >
+            <span
+                class="font-crimson uppercase text-[#5a6a32] text-[11px] tracking-[0.12em] mt-2 opacity-80"
+                >Horas</span
+            >
+        </div>
+        <div class="flex flex-col items-center">
+            <span
+                id="f-min"
+                class="font-crimson font-bold text-[#5a6a32] text-[34px] leading-none"
+                >00</span
+            >
+            <span
+                class="font-crimson uppercase text-[#5a6a32] text-[11px] tracking-[0.12em] mt-2 opacity-80"
+                >Min.</span
+            >
+        </div>
+        <div class="flex flex-col items-center">
+            <span
+                id="f-seg"
+                class="font-crimson font-bold text-[#5a6a32] text-[34px] leading-none"
+                >00</span
+            >
+            <span
+                class="font-crimson uppercase text-[#5a6a32] text-[11px] tracking-[0.12em] mt-2 opacity-80"
+                >Seg.</span
+            >
+        </div>
+    </div>
+
+    <!-- LÍNEA DECORATIVA ABAJO -->
+    <div class="flex items-center justify-center w-full max-w-[320px]">
+        <span class="w-2 h-2 rotate-45 bg-[#5a6a32]"></span>
+        <span class="flex-1 h-px bg-[#5a6a32]/60"></span>
+        <span class="w-2 h-2 rotate-45 bg-[#5a6a32]"></span>
+    </div>
+</div>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initFaltan() {
+        const elDias = document.getElementById("f-dias");
+        const elHoras = document.getElementById("f-horas");
+        const elMin = document.getElementById("f-min");
+        const elSeg = document.getElementById("f-seg");
+        const contenedor = document.getElementById("faltan-contenedor");
+        if (!elDias || !elHoras || !elMin || !elSeg || !contenedor) return;
+
+        // Sábado 25 de julio de 2026, 18:00
+        const objetivo = new Date(2026, 6, 25, 18, 0, 0).getTime();
+        const pad = (n: number) => String(n).padStart(2, "0");
+
+        const actualizar = () => {
+            let dif = Math.max(0, objetivo - Date.now());
+            const dias = Math.floor(dif / 86400000);
+            dif -= dias * 86400000;
+            const horas = Math.floor(dif / 3600000);
+            dif -= horas * 3600000;
+            const min = Math.floor(dif / 60000);
+            dif -= min * 60000;
+            const seg = Math.floor(dif / 1000);
+
+            elDias.textContent = pad(dias);
+            elHoras.textContent = pad(horas);
+            elMin.textContent = pad(min);
+            elSeg.textContent = pad(seg);
+        };
+        actualizar();
+        setInterval(actualizar, 1000);
+
+        // Entrada al hacer scroll
+        gsap.from(
+            ["#faltan-titulo", "#faltan-numeros"],
+            {
+                opacity: 0,
+                y: 25,
+                duration: 1,
+                ease: "power3.out",
+                stagger: 0.15,
+                scrollTrigger: {
+                    trigger: contenedor,
+                    start: "top 85%",
+                    toggleActions: "play none none reset",
+                },
+            },
+        );
+    }
+
+    document.addEventListener("DOMContentLoaded", initFaltan);
+    document.addEventListener("astro:page-load", initFaltan);
+</script>

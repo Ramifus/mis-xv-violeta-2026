@@ -1,0 +1,116 @@
+---
+// Calendario.astro  (Recepción social)
+const mapsUrl =
+    "https://www.google.com/maps/search/?api=1&query=Av.+Collpapampa+Av.+La+Floresta+Tiquipaya";
+---
+
+<div
+    id="recep-contenedor"
+    data-entrada
+    class="relative w-full flex flex-col items-center justify-center text-center px-8 py-12"
+>
+    <!-- SOBRE -->
+    <svg
+        id="recep-sobre"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 52 42"
+        class="w-[56px] h-auto text-[#5a6a32] mb-3"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <rect x="4" y="9" width="44" height="30" rx="3"></rect>
+        <path d="M5 11 L26 27 L47 11"></path>
+        <path
+            d="M26 4 C24.5 1.5 20 2 20 5.5 C20 8 26 11 26 11 C26 11 32 8 32 5.5 C32 2 27.5 1.5 26 4Z"
+            fill="currentColor"
+            stroke="none"
+        ></path>
+    </svg>
+
+    <!-- TÍTULO -->
+    <p
+        id="recep-titulo"
+        class="m-0 font-great-vibes text-[#5a6a32] text-[38px] leading-none mb-2"
+    >
+        Recepción Social
+    </p>
+
+    <!-- NOMBRE DEL SALÓN -->
+    <p
+        id="recep-salon"
+        class="m-0 font-crimson font-bold uppercase text-[#5a6a32] text-[16px] tracking-[0.12em] mb-6"
+    >
+        Salón y Convenciones Plenilunio
+    </p>
+
+    <!-- HORA + DIRECCIÓN -->
+    <div id="recep-datos" class="flex items-center justify-center gap-4">
+        <span
+            class="font-crimson font-bold text-[#5a6a32] text-[22px] whitespace-nowrap"
+        >
+            17:30 hrs
+        </span>
+        <span class="w-px h-10 bg-[#5a6a32]/40"></span>
+        <p
+            class="m-0 font-crimson text-[#5a6a32] text-[15px] leading-[1.4] text-left"
+        >
+            Av. Collpapampa casi Av. La Floresta<br />(Zona Tiquipaya)
+        </p>
+    </div>
+
+    <!-- BOTÓN VER UBICACIÓN -->
+    <a
+        id="recep-boton"
+        href={mapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="relative inline-flex items-center justify-center rounded-full
+               border border-[#5a6a32] px-10 py-3 mt-9 transition-colors
+               hover:bg-[#5a6a32]/10"
+    >
+        <span
+            class="font-crimson uppercase text-[#5a6a32] text-[13px] tracking-[0.22em]"
+        >
+            Ver ubicación
+        </span>
+    </a>
+</div>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initRecepcion() {
+        const contenedor = document.getElementById("recep-contenedor");
+        if (!contenedor) return;
+
+        gsap.from(
+            [
+                "#recep-sobre",
+                "#recep-titulo",
+                "#recep-salon",
+                "#recep-datos",
+                "#recep-boton",
+            ],
+            {
+                opacity: 0,
+                y: 25,
+                duration: 1,
+                ease: "power3.out",
+                stagger: 0.15,
+                scrollTrigger: {
+                    trigger: contenedor,
+                    start: "top 85%",
+                    toggleActions: "play none none reset",
+                },
+            },
+        );
+    }
+
+    document.addEventListener("DOMContentLoaded", initRecepcion);
+    document.addEventListener("astro:page-load", initRecepcion);
+</script>

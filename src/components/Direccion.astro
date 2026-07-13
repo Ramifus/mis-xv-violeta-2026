@@ -1,0 +1,83 @@
+---
+// Direccion.astro  (Card con dedicatoria de los padres)
+---
+
+<div
+    id="direccion-contenedor"
+    class="relative w-full overflow-hidden flex items-center justify-center px-5"
+>
+    <!-- FONDO BRILLO (de extremo a extremo, color real sin opacidad) -->
+    <img
+        src="/imagenes/ver.png"
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+    />
+
+    <!-- CARD CON EL TEXTO -->
+    <div
+        id="direccion-marco"
+        class="relative z-10 my-16 w-full max-w-[360px] bg-white/10 backdrop-blur-sm rounded-[22px]
+               shadow-[0_18px_45px_rgba(0,0,0,0.25)] border border-white/40
+               px-8 py-12 text-center overflow-hidden"
+    >
+        <!-- borde interior decorativo -->
+        <span
+            class="pointer-events-none absolute inset-[10px] rounded-[16px] border border-white/25"
+        ></span>
+
+        <div id="direccion-texto" class="relative">
+            <p
+                class="m-0 font-crimson italic text-white text-[19px] leading-[1.85]
+                       [text-shadow:0_1px_6px_rgba(0,0,0,0.35)]"
+            >
+                «Con el corazón rebosante de amor y gratitud, queremos invitarte
+                a compartir con nosotros un instante mágico e irrepetible: los
+                15 años de nuestra amada hija. Hoy, nuestra niña florece con
+                dulzura en una nueva y hermosa etapa de su vida. Tu abrazo, tu
+                sonrisa y tu compañía serán el regalo más valioso para celebrar
+                este día que guardaremos por siempre en el corazón.»
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    function setupDireccionScroll() {
+        const contenedor = document.getElementById("direccion-contenedor");
+        if (!contenedor) return;
+
+        const marco = document.getElementById("direccion-marco");
+        const texto = document.getElementById("direccion-texto");
+
+        gsap.timeline({
+            scrollTrigger: {
+                trigger: contenedor,
+                start: "top 85%",
+                toggleActions: "play none none reset",
+            },
+        })
+            .from(marco, {
+                scale: 0.8,
+                opacity: 0,
+                duration: 1.2,
+                ease: "back.out(1.7)",
+            })
+            .from(
+                texto,
+                {
+                    opacity: 0,
+                    y: 30,
+                    duration: 1,
+                    ease: "power3.out",
+                },
+                "-=0.6",
+            );
+    }
+
+    document.addEventListener("DOMContentLoaded", setupDireccionScroll);
+    document.addEventListener("astro:page-load", setupDireccionScroll);
+</script>
